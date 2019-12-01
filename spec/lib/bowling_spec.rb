@@ -53,7 +53,7 @@ describe "ボウリングのスコア計算" do
                 # 以降は全てガター
                 add_many_scores(16,0)
                 # 合計を計算
-                @game.calc_core
+                @game.calc_score
                 # 期待する合計
                 # 3 + 5 + 5 + 4 = 17
                 expect(@game.total_score).to eq 17
@@ -73,7 +73,7 @@ describe "ボウリングのスコア計算" do
                 @game.add_score(3)
                 @game.add_score(7)
                 # 合計を計算
-                @game.calc_core
+                @game.calc_score
                 # 期待する合計 ※()内はボーナス点
                 # 3 + 7 + 4 + (4) + 3 + 7 = 28
                 expect(@game.total_score).to eq 28
