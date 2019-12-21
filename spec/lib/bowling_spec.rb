@@ -178,7 +178,7 @@ describe "ボウリングのスコア計算" do
             	@game.add_score(10)
             	# 合計を計算
             	@game.calc_score
-            	# 期待する合計 ※()内はボーナス点
+            	# 期待する合計
             	# 30 * 10 = 300
             	expect(@game.total_score).to eq 300
             end
@@ -226,6 +226,29 @@ describe "ボウリングのスコア計算" do
                 # 期待する合計　※()内はボーナス点
                 # 10 + (5) + (4) = 19
                 expect(@game.frame_score(1)).to eq 19
+            end
+        end
+
+        context "全てストライクを取った場合" do
+            it "ストライクボーナスが加算されること" do
+                # 全てのフレームでストライク
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                @game.add_score(10)
+                # 合計を計算
+                @game.calc_score
+                # 期待する合計
+                # 30 * 10 = 300
+                expect(@game.frame_score(10)).to eq 300
             end
         end
     end

@@ -10,6 +10,10 @@ class Bowling
         @temp = []
         # フレームごとの合計を格納する配列
         @frame_score = []
+        #========== ↓ 修正コード ↓ ==========
+        # フレーム番号
+        @frame = 1
+        #========== ↑ 修正コード ↑ ==========
     end
 
     # スコアの合計を返す
@@ -28,10 +32,26 @@ class Bowling
         @temp << pins
         # 2投分のデータが入っているか、1投目がストライクだったら、
         # 1フレーム分のスコアとして全体に追加する
-        if @temp.size == 2 || strike?(@temp)
-            @scores << @temp
-            @temp = []
+        #if @temp.size == 2 || strike?(@temp)
+        #    @scores << @temp
+        #    @temp = []
+        #end
+        #========== ↓ 修正コード ↓ ==========
+        # 1 ～ 9フレームの場合
+        if not_last_frame?(@frame)
+            if @temp.size == 2 || strike?(@temp)
+                @scores << @temp
+                @temp = []
+                @frame += 1
+            end
+        # 10フレームの場合
+        else 
+            if @temp.size == 3 || (@temp.size == 2 && !(spare?(@temp)) && !(strike?(@temp)))
+                @scores << @temp
+                @temp = []
+            end
         end
+        #========== ↑ 修正コード ↑ ==========
     end
 
     # スコアの合計を計算する
@@ -77,10 +97,23 @@ class Bowling
     def calc_strike_bonus(index)
         # 次のフレームもストライクで、なおかつ最終フレーム以外なら
         # もう一つ次のフレームの一投目をボーナスの対象にする
-        if strike?(@scores[index]) && not_last_frame?(index + 1)
-            20 + @scores[index + 1].first
+        #if strike?(@scores[index]) && not_last_frame?(index + 1)
+        #    20 + @scores[index + 1].first
+        #else
+        #    10 + @scores[index].inject(:+)
+        #end
+        #========== ↓ 修正コード ↓ ==========
+        # 1 ～ 8フレームの場合
+        if index < 9
+            if strike?(@scores[index])
+                20 + @scores[index + 1].first
+            else
+                10 + @scores[index].inject(:+)
+            end
+        # 9フレームの場合
         else
-            10 + @scores[index].inject(:+)
+            10 + @scores[index][0] + @scores[index][1]
         end
+        #========== ↑ 修正コード ↑ ==========
     end
 end
